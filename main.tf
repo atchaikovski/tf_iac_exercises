@@ -4,10 +4,10 @@ resource "aws_launch_configuration" "example" {
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.instance.id]
   user_data = <<-EOF
-              #!/bin/bash
-              echo "Hello, World from Alex T. " > index.html
-              nohup busybox httpd -f -p ${var.server_port} &
-              EOF
+          #!/bin/bash
+          echo "Hello, World from Alex T. at $hostname" > index.html
+          nohup busybox httpd -f -p ${var.server_port} &
+          EOF
    
     lifecycle {
         create_before_destroy = true
