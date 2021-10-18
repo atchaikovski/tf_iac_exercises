@@ -15,6 +15,9 @@ resource "aws_security_group" "alb" {
      protocol = "-1"
      cidr_blocks = ["0.0.0.0/0"]
    } 
+   tags = {
+     Name = "aws-SG-example"
+   }
 }
 
 resource "aws_lb" "example" {
@@ -22,6 +25,9 @@ resource "aws_lb" "example" {
   load_balancer_type = "application"
   subnets            = data.aws_subnet_ids.default.ids
   security_groups    = [aws_security_group.alb.id]
+  tags = {
+    Name = "aws-LB-example"
+  }
 }
 
 resource "aws_lb_listener" "http" {
@@ -31,11 +37,14 @@ resource "aws_lb_listener" "http" {
   # По умолчанию возвращает простую страницу с кодом 404
   default_action {
     type = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "404: page not found"
-      status_code  = 404
-    } 
+     fixed_response {
+       content_type = "text/plain"
+       message_body = "404: page not found"
+       status_code  = 404
+     } 
+   }
+   tags = {
+     Name = "aws-LB-listener-example"
    }
 }
 
@@ -53,8 +62,10 @@ resource "aws_lb_target_group" "asg" {
     healthy_threshold   = 2
     unhealthy_threshold = 2
   }
+  tags = {
+    Name = "aws-LB-TG-example"
+  }
 }
-
 
 resource "aws_launch_configuration" "example" {
   image_id        = "ami-0c55b159cbfafe1f0"
@@ -68,6 +79,9 @@ resource "aws_launch_configuration" "example" {
    
     lifecycle {
         create_before_destroy = true
+  }
+  tags = {
+    Name = "aws-launch-config-example"
   }
 }
 
