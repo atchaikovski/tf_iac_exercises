@@ -1,29 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
-data "aws_subnet_ids" "default" {
-  vpc_id = data.aws_vpc.default.id
-}
-
-data "aws_vpc" "default" {}
-
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
-}
-#----------------------- data section ends here ------------------------
 
 resource "aws_security_group" "alb" {
   name = "terraform-example-alb"
@@ -135,26 +109,4 @@ resource "aws_security_group" "instance" {
     cidr_blocks = ["0.0.0.0/0"]
   } 
 
-}
-
-variable "server_port" {
-  description = "The port the server will use for HTTP requests"
-  type        = number
-  default = 8080
-}
-
-output "port" {
-  value = var.server_port
-}
-
-/*
-output "public_ip" {
-  value       = aws_instance.example.public_ip
-  description = "The public IP address of the web server"
-}
-*/
-
-output "alb_dns_name" {
-  value       = aws_lb.example.dns_name
-  description = "The domain name of the load balancer"
 }
